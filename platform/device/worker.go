@@ -2,6 +2,7 @@ package device
 
 import (
 	"context"
+	originLog "log"
 	"time"
 
 	"github.com/go-kit/kit/log"
@@ -38,30 +39,44 @@ func (w *Worker) Run(ctx context.Context) error {
 	const subscription = "devices_worker"
 	authenticateEvents, err := w.ps.Subscribe(ctx, subscription, mdm.AuthenticateTopic)
 	if err != nil {
+		originLog.Println("=========!authenticateEvents")
+		originLog.Println("err", err)
 		return errors.Wrapf(err, "subscribing %s to %s", subscription, mdm.AuthenticateTopic)
 	}
 	tokenUpdateEvents, err := w.ps.Subscribe(ctx, subscription, mdm.TokenUpdateTopic)
 	if err != nil {
+		originLog.Println("=========!tokenUpdateEvents")
+		originLog.Println("err", err)
 		return errors.Wrapf(err, "subscribing %s to %s", subscription, mdm.TokenUpdateTopic)
 	}
 	getBootstrapTokenEvents, err := w.ps.Subscribe(ctx, subscription, mdm.GetBootstrapTokenTopic)
 	if err != nil {
+		originLog.Println("=========!getBootstrapTokenEvents")
+		originLog.Println("err", err)
 		return errors.Wrapf(err, "subscribing %s to %s", subscription, mdm.GetBootstrapTokenTopic)
 	}
 	setBootstrapTokenEvents, err := w.ps.Subscribe(ctx, subscription, mdm.SetBootstrapTokenTopic)
 	if err != nil {
+		originLog.Println("=========!setBootstrapTokenEvents")
+		originLog.Println("err", err)
 		return errors.Wrapf(err, "subscribing %s to %s", subscription, mdm.SetBootstrapTokenTopic)
 	}
 	checkoutEvents, err := w.ps.Subscribe(ctx, subscription, mdm.CheckoutTopic)
 	if err != nil {
+		originLog.Println("=========!checkoutEvents")
+		originLog.Println("err", err)
 		return errors.Wrapf(err, "subscribing %s to %s", subscription, mdm.CheckoutTopic)
 	}
 	depSyncEvents, err := w.ps.Subscribe(ctx, subscription, sync.SyncTopic)
 	if err != nil {
+		originLog.Println("=========!depSyncEvents")
+		originLog.Println("err", err)
 		return errors.Wrapf(err, "subscribing %s to %s", subscription, sync.SyncTopic)
 	}
 	connectEvents, err := w.ps.Subscribe(ctx, subscription, mdm.ConnectTopic)
 	if err != nil {
+		originLog.Println("=========!connectEvents")
+		originLog.Println("err", err)
 		return errors.Wrapf(err, "subscribing %s to %s", subscription, mdm.ConnectTopic)
 	}
 
