@@ -2,7 +2,7 @@ package device
 
 import (
 	"context"
-	originLog "log"
+	stdlog "log"
 	"time"
 
 	"github.com/go-kit/kit/log"
@@ -39,44 +39,44 @@ func (w *Worker) Run(ctx context.Context) error {
 	const subscription = "devices_worker"
 	authenticateEvents, err := w.ps.Subscribe(ctx, subscription, mdm.AuthenticateTopic)
 	if err != nil {
-		originLog.Println("=========!authenticateEvents")
-		originLog.Println("err", err)
+		stdlog.Println("=========!authenticateEvents")
+		stdlog.Println("err", err)
 		return errors.Wrapf(err, "subscribing %s to %s", subscription, mdm.AuthenticateTopic)
 	}
 	tokenUpdateEvents, err := w.ps.Subscribe(ctx, subscription, mdm.TokenUpdateTopic)
 	if err != nil {
-		originLog.Println("=========!tokenUpdateEvents")
-		originLog.Println("err", err)
+		stdlog.Println("=========!tokenUpdateEvents")
+		stdlog.Println("err", err)
 		return errors.Wrapf(err, "subscribing %s to %s", subscription, mdm.TokenUpdateTopic)
 	}
 	getBootstrapTokenEvents, err := w.ps.Subscribe(ctx, subscription, mdm.GetBootstrapTokenTopic)
 	if err != nil {
-		originLog.Println("=========!getBootstrapTokenEvents")
-		originLog.Println("err", err)
+		stdlog.Println("=========!getBootstrapTokenEvents")
+		stdlog.Println("err", err)
 		return errors.Wrapf(err, "subscribing %s to %s", subscription, mdm.GetBootstrapTokenTopic)
 	}
 	setBootstrapTokenEvents, err := w.ps.Subscribe(ctx, subscription, mdm.SetBootstrapTokenTopic)
 	if err != nil {
-		originLog.Println("=========!setBootstrapTokenEvents")
-		originLog.Println("err", err)
+		stdlog.Println("=========!setBootstrapTokenEvents")
+		stdlog.Println("err", err)
 		return errors.Wrapf(err, "subscribing %s to %s", subscription, mdm.SetBootstrapTokenTopic)
 	}
 	checkoutEvents, err := w.ps.Subscribe(ctx, subscription, mdm.CheckoutTopic)
 	if err != nil {
-		originLog.Println("=========!checkoutEvents")
-		originLog.Println("err", err)
+		stdlog.Println("=========!checkoutEvents")
+		stdlog.Println("err", err)
 		return errors.Wrapf(err, "subscribing %s to %s", subscription, mdm.CheckoutTopic)
 	}
 	depSyncEvents, err := w.ps.Subscribe(ctx, subscription, sync.SyncTopic)
 	if err != nil {
-		originLog.Println("=========!depSyncEvents")
-		originLog.Println("err", err)
+		stdlog.Println("=========!depSyncEvents")
+		stdlog.Println("err", err)
 		return errors.Wrapf(err, "subscribing %s to %s", subscription, sync.SyncTopic)
 	}
 	connectEvents, err := w.ps.Subscribe(ctx, subscription, mdm.ConnectTopic)
 	if err != nil {
-		originLog.Println("=========!connectEvents")
-		originLog.Println("err", err)
+		stdlog.Println("=========!connectEvents")
+		stdlog.Println("err", err)
 		return errors.Wrapf(err, "subscribing %s to %s", subscription, mdm.ConnectTopic)
 	}
 
@@ -84,7 +84,12 @@ func (w *Worker) Run(ctx context.Context) error {
 		var err error
 		select {
 		case <-ctx.Done():
-			return ctx.Err()
+			_err := ctx.Err()
+			if _err != nil {
+				stdlog.Println("=========!ctx.Done")
+				stdlog.Println("err", err)
+			}
+			return _err
 		case ev := <-authenticateEvents:
 			err = w.updateFromAuthenticate(ctx, ev.Message)
 		case ev := <-tokenUpdateEvents:
