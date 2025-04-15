@@ -218,6 +218,7 @@ func serve(args []string) error {
 	}
 
 	devWorker := device.NewWorker(devDB, sm.PubClient, logger)
+	stdlog.Println("running worker")
 	go devWorker.Run(context.Background())
 
 	userDB, err := userbuiltin.NewDB(sm.DB)
